@@ -7,7 +7,9 @@
 [![Model](https://img.shields.io/badge/Model-Random%20Forest-4CAF50?style=flat)](https://scikit-learn.org)
 [![AUC-ROC](https://img.shields.io/badge/AUC--ROC-0.848-blue?style=flat)](https://github.com/AbdulbariSoliman/Bank-Customer-Churn-AI-Intelligence-Platform)
 
-**🔗 [Open Live App →](https://bank-customer-data-prep-j3mmdpxvqukgq88ppncxxx.streamlit.app/)**
+**🔗 [Open Live App →](https://bank-customer-data-prep-j3mmdpxvqukgq88ppncxxx.streamlit.app/)** · **📖 [App User Guide (with screenshots) →](docs/APP_GUIDE.md)**
+
+![Streamlit dashboard overview](images/app-overview.png)
 
 ---
 
@@ -38,6 +40,9 @@ This project builds an **AI-powered decision system** that identifies which cust
 ```
 ├── app.py                          # Streamlit dashboard (Part 2)
 ├── requirements.txt
+├── images/                         # App screenshots used in this README
+├── docs/
+│   └── APP_GUIDE.md                # Step-by-step app guide with screenshots
 ├── notebooks/                      # ML pipeline (Part 1)
 ├── models/
 │   ├── churn_model.pkl             # Trained Random Forest classifier
@@ -158,6 +163,20 @@ The app provides four core capabilities — all accessible without any coding:
 
 ---
 
+### App Preview
+
+> 📖 For a full step-by-step tour of every feature, including file upload and exports, see the **[App User Guide](docs/APP_GUIDE.md)**.
+
+**What-If ROI Simulation:** set a target segment, a cost per customer and a campaign effectiveness, and see the capital saved and the ROI.
+
+![What-If ROI simulation](images/app-roi-simulation.png)
+
+**SHAP explanation for a single customer:** see which factors increase or reduce one customer's churn risk.
+
+![SHAP per-customer explanation](images/app-shap.png)
+
+---
+
 ## 2.2 Dashboard Modes
 
 ### Internal Demo Mode
@@ -165,6 +184,8 @@ Loads the processed dataset automatically from `data/processed/`. Use this to ex
 
 ### Client Upload Mode
 Upload any customer CSV file for batch analysis. The app uses a flexible **column alias resolver** that accepts non-standard column names and maps them automatically to the expected schema.
+
+The upload also cleans currency formatting (e.g. `$1,200.50`) and skips rows with invalid numbers, with a warning that shows how many.
 
 A downloadable **CSV template** is available in the sidebar.
 

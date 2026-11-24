@@ -36,6 +36,9 @@ def process_data(df):
     df.columns = df.columns.str.strip().str.lower()
 
     alias_map = {
+        'CustomerId':     ['customerid', 'customer', 'clientid'],
+        'Surname':        ['surname', 'lastname'],
+        'Geography':      ['geography', 'country', 'region'],
         'CreditScore':    ['creditscore', 'score', 'credit_rating', 'cr_score'],
         'Gender':         ['gender', 'sex', 'gen', 'gender_type'],
         'Age':            ['age', 'years', 'customer_age'],
@@ -47,11 +50,15 @@ def process_data(df):
         'EstimatedSalary':['estimatedsalary', 'salary', 'income', 'annual_revenue', 'annualrevenue']
     }
 
+    # Compare names without spaces, underscores or dashes (e.g. "credit_rating" == "creditrating")
+    def clean_name(name):
+        return str(name).lower().replace(" ", "").replace("_", "").replace("-", "")
+
     found_cols = {}
     for official_name, aliases in alias_map.items():
+        clean_aliases = {clean_name(a) for a in aliases}
         for col in df.columns:
-            clean_col = col.lower().replace(" ", "").replace("_", "")
-            if clean_col in aliases:
+            if col not in found_cols and clean_name(col) in clean_aliases:
                 found_cols[col] = official_name
                 break
     df = df.rename(columns=found_cols)
@@ -62,6 +69,18 @@ def process_data(df):
     missing = [c for c in required if c not in df.columns]
     if missing:
         raise KeyError(f"Missing columns after alias resolution: {missing}")
+
+    # Convert numeric columns (handles values like "$1,200") and drop rows that are not valid numbers
+    numeric_cols = [c for c in required if c != 'Gender']
+    for c in numeric_cols:
+        if not pd.api.types.is_numeric_dtype(df[c]):
+            df[c] = df[c].astype(str).str.replace(r"[$€£,\s]", "", regex=True)
+        df[c] = pd.to_numeric(df[c], errors='coerce')
+    invalid_rows = df[numeric_cols].isna().any(axis=1)
+    n_invalid = int(invalid_rows.sum())
+    df = df[~invalid_rows].copy()
+    if df.empty:
+        raise ValueError("No valid rows found: numeric columns contain text or empty values")
 
     df['Gender_num']        = np.where(df['Gender'].astype(str).str.strip().str.lower().str.startswith('f'), 1, 0)
     df['ProductPerYear']    = df['NumOfProducts'] / (df['Tenure'] + 0.1)
@@ -78,6 +97,7 @@ def process_data(df):
     cond    = [(df['Prob'] < 0.3), (df['Prob'] < 0.5), (df['Prob'] < 0.8), (df['Prob'] >= 0.8)]
     choices = ["🟢 Stay (Safe)", "🟡 Likely Stay", "🟠 Likely Leave", "🔴 Highly Leave (Churn)"]
     df['AI_Verdict'] = np.select(cond, choices, default="Unknown")
+    df.attrs['invalid_rows'] = n_invalid
 
     return df, model_features
 
@@ -141,6 +161,10 @@ except ValueError as e:
 except Exception as e:
     st.error(f"❌ Unexpected error during processing: {e}")
     st.stop()
+
+if df_results.attrs.get('invalid_rows', 0):
+    st.warning(f"⚠️ {df_results.attrs['invalid_rows']} row(s) were skipped because they contain text "
+               "or empty values in numeric columns. Please check your file.")
 
 # --- 6. GLOBAL FILTERS ---
 with st.container(border=True):
@@ -225,7 +249,7 @@ with st.expander("Analyze & Export Profile", expanded=False):
         st.write(f"#### Result: {verdict}")
         st.metric("Churn Probability", f"{prob:.2%}")
         st.subheader("📝 Customer Feature Table")
-        st.dataframe(res, use_container_width=True)
+        st.dataframe(res, width="stretch")
         st.download_button("📥 Export Individual Profile (CSV)",
                             res.to_csv(index=False).encode('utf-8'),
                             "individual_assessment.csv")
@@ -317,7 +341,7 @@ with tab3:
 
         if st.button("🔍 Explain This Customer"):
             try:
-                customer_features = customer_row[model_feats].values.reshape(1, -1)
+                customer_features = customer_row[model_feats].astype(float).values.reshape(1, -1)
                 customer_scaled   = scaler_model.transform(customer_features)
 
                 @st.cache_resource
@@ -337,7 +361,7 @@ with tab3:
 
                 shap_df = pd.DataFrame({
                     "Feature":     model_feats,
-                    "Customer Value": customer_row[model_feats].values.round(3),
+                    "Customer Value": customer_row[model_feats].astype(float).values.round(3),
                     "SHAP Impact": sv.round(4)
                 }).sort_values("SHAP Impact", key=abs, ascending=False)
 
@@ -350,7 +374,7 @@ with tab3:
                 col_b.metric("Churn Probability", f"{customer_row['Prob']:.1%}")
 
                 st.markdown("#### Top factors driving this prediction:")
-                st.dataframe(shap_df, use_container_width=True)
+                st.dataframe(shap_df, width="stretch")
 
                 fig_shap, ax_shap = plt.subplots(figsize=(8, 5))
                 colors = ['#E24B4A' if v > 0 else '#1D9E75' for v in shap_df['SHAP Impact']]

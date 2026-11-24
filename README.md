@@ -7,7 +7,13 @@
 [![Model](https://img.shields.io/badge/Model-Random%20Forest-4CAF50?style=flat)](https://scikit-learn.org)
 [![AUC-ROC](https://img.shields.io/badge/AUC--ROC-0.848-blue?style=flat)](https://github.com/AbdulbariSoliman/Bank-Customer-Churn-AI-Intelligence-Platform)
 
-**🔗 [Open Live App →](https://bank-customer-data-prep-j3mmdpxvqukgq88ppncxxx.streamlit.app/)** · **📖 [App User Guide (with screenshots) →](docs/APP_GUIDE.md)**
+| Link | Opens |
+|---|---|
+| 🔗 [Live App](https://bank-customer-data-prep-j3mmdpxvqukgq88ppncxxx.streamlit.app/) | the Streamlit dashboard |
+| 📖 [App Guide](docs/APP_GUIDE.md) | the step-by-step guide with 11 screenshots |
+| 📓 [Analysis Notebook](notebooks/Bank_Customer_Churn_Analysis.ipynb) | the model training and evaluation, with charts |
+| 📄 [Retention Playbook](outputs/recommendations_final.md) | the actions for each customer segment |
+| 📊 [Segment Summary](outputs/cluster_summary_unscaled.csv) | the cluster averages table |
 
 ![Streamlit dashboard overview](images/app-overview.png)
 

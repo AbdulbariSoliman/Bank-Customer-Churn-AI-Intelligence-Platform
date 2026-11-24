@@ -111,12 +111,14 @@ K-Means Clustering was applied to move the analysis from general predictions to 
 
 ### Risk Hierarchy & Retention Recommendations
 
-| Cluster | Customer Profile | Recommended Strategy | Risk Level |
-|---|---|---|---|
-| **Cluster 0** | High Balance / High Salary | **VIP Retention** — Cross-sell a second product immediately to secure assets | 🔴 Critical |
-| **Cluster 2** | High Balance / Low Salary | **Debt Stabilisation** — Offer financial counselling or consolidation products | 🟠 High |
-| **Cluster 1** | Low Tenure / High Products | **Onboarding Support** — High-touch service to retain customers through Year 1 | 🟡 Moderate |
-| **Cluster 3** | High Tenure / Low Balance | **Loyalty Maintenance** — Low-cost rewards programme for a stable, long-term base | 🟢 Stable |
+| Cluster | Customer Profile | Churn Rate | Recommended Strategy | Risk Level |
+|---|---|---|---|---|
+| **Cluster 0** | High Balance / High Salary | **26.2%** | **VIP Retention** — Cross-sell a second product immediately to secure assets | 🔴 Critical |
+| **Cluster 2** | High Balance / Low Salary | **23.4%** | **Financial Stability Support** — Competitive savings rates and financial planning | 🟠 High |
+| **Cluster 1** | Low Tenure / More Products | **17.7%** | **Onboarding Support** — High-touch service to retain customers through Year 1 | 🟡 Moderate |
+| **Cluster 3** | High Tenure / Low Balance | **12.4%** | **Loyalty Maintenance** — Low-cost rewards programme for a stable, long-term base | 🟢 Stable |
+
+📄 Full segment playbook with actions and balances at risk: [outputs/recommendations_final.md](outputs/recommendations_final.md)
 
 ---
 

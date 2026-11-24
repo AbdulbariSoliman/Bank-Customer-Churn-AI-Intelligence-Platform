@@ -26,7 +26,7 @@ def load_assets():
 rf_model, scaler_model, best_threshold = load_assets()
 
 # Test-set ROC-AUC from the training notebook (Random Forest, 20% hold-out)
-MODEL_TEST_AUC = 0.8351
+MODEL_TEST_AUC = 0.848
 
 # --- 3. DATA PROCESSING AND FEATURE ENGINEERING ---
 def process_data(df):

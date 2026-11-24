@@ -25,6 +25,9 @@ def load_assets():
 
 rf_model, scaler_model, best_threshold = load_assets()
 
+# Test-set ROC-AUC from the training notebook (Random Forest, 20% hold-out)
+MODEL_TEST_AUC = 0.8351
+
 # --- 3. DATA PROCESSING AND FEATURE ENGINEERING ---
 def process_data(df):
     df = df.copy()
@@ -177,10 +180,9 @@ k1.metric("💰 Exposure", f"${at_risk_money:,.0f}")
 k2.metric("📉 Risk Avg", f"{filtered_df['Prob'].mean():.1%}")
 k3.metric("🚨 Critical Alerts", len(filtered_df[filtered_df.Prob >= 0.8]))
 with k4:
-    st.caption("🤖 AI Health (AUC-ROC)")
-    # FIX: was hardcoded 0.88 — now reflects actual model performance
-    st.progress(0.98)
-    st.caption("0.98")
+    st.caption("🤖 AI Health (Test AUC-ROC)")
+    st.progress(MODEL_TEST_AUC)
+    st.caption(f"{MODEL_TEST_AUC:.3f}")
 
 # --- 8. SINGLE CUSTOMER AI ASSESSMENT ---
 st.divider()

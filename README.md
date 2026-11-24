@@ -5,7 +5,7 @@
 [![Live App](https://img.shields.io/badge/Live%20App-Streamlit-FF4B4B?style=flat&logo=streamlit)](https://bank-customer-data-prep-j3mmdpxvqukgq88ppncxxx.streamlit.app/)
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat&logo=python)](https://python.org)
 [![Model](https://img.shields.io/badge/Model-Random%20Forest-4CAF50?style=flat)](https://scikit-learn.org)
-[![AUC-ROC](https://img.shields.io/badge/AUC--ROC-0.8351-blue?style=flat)](https://github.com/AbdulbariSoliman/Bank-Customer-Data-Prep)
+[![AUC-ROC](https://img.shields.io/badge/AUC--ROC-0.848-blue?style=flat)](https://github.com/AbdulbariSoliman/Bank-Customer-Churn-AI-Intelligence-Platform)
 
 **🔗 [Open Live App →](https://bank-customer-data-prep-j3mmdpxvqukgq88ppncxxx.streamlit.app/)**
 
@@ -25,8 +25,9 @@ This project builds an **AI-powered decision system** that identifies which cust
 |---|---|
 | Dataset | 10,000 customer records (Maven Analytics — Kaggle) |
 | Model | Random Forest Classifier |
-| AUC-ROC | **0.8351** (vs 0.7814 baseline — +6.9%) |
-| Accuracy | **85.25%** (vs 81.25% baseline — +4.0%) |
+| Test AUC-ROC | **0.848** (vs 0.7814 baseline — +8.5%) |
+| Cross-validated AUC-ROC | **0.841** (5-fold, stable across folds) |
+| Accuracy | **83.9%** at the F1-optimised threshold (vs 81.25% baseline) |
 | Segments | 4 K-Means risk cohorts with tailored retention strategies |
 | Deployment | Live Streamlit dashboard — no coding required for business users |
 
@@ -88,8 +89,13 @@ A **Random Forest Classifier** was selected to capture non-linear relationships 
 
 | Metric | Logistic Regression (Baseline) | Random Forest (Final) | Improvement |
 |---|---|---|---|
-| Accuracy | 81.25% | **85.25%** | +4.00% |
-| ROC-AUC | 0.7814 | **0.8351** | +6.87% |
+| ROC-AUC (test) | 0.7814 | **0.848** | +8.5% |
+| ROC-AUC (5-fold CV) | — | **0.841** | — |
+| Accuracy | 81.25% | **83.9%** | +2.65% |
+
+**Model setup:** 300 trees, max depth 8, minimum 25 samples per leaf, balanced class weights. Evaluated on a stratified 80/20 split. Train AUC is 0.886, so the gap to test (0.04) shows no meaningful overfitting.
+
+**Decision threshold:** 0.579, chosen to maximise the F1-score on the precision–recall curve rather than using the default 0.5. Accuracy above is measured at this threshold.
 
 ### Top Churn Drivers
 
@@ -221,8 +227,8 @@ The app re-applies the same feature engineering pipeline on every prediction:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/AbdulbariSoliman/Bank-Customer-Data-Prep.git
-cd Bank-Customer-Data-Prep
+git clone https://github.com/AbdulbariSoliman/Bank-Customer-Churn-AI-Intelligence-Platform.git
+cd Bank-Customer-Churn-AI-Intelligence-Platform
 
 # 2. Install dependencies
 pip install -r requirements.txt
@@ -250,7 +256,7 @@ streamlit run app.py
 
 ## ✅ Conclusion
 
-By combining **predictive modelling (AUC-ROC: 0.8351)** with **strategic segmentation (K-Means, 4 cohorts)** and a **live business dashboard**, this pipeline enables a bank to prioritise its retention budget toward customers who represent the highest financial value and the highest probability of exit — rather than applying a one-size-fits-all campaign across the full portfolio.
+By combining **predictive modelling (AUC-ROC: 0.848)** with **strategic segmentation (K-Means, 4 cohorts)** and a **live business dashboard**, this pipeline enables a bank to prioritise its retention budget toward customers who represent the highest financial value and the highest probability of exit — rather than applying a one-size-fits-all campaign across the full portfolio.
 
 The result is a system that a data science team can maintain and a business team can use independently, without writing a single line of code.
 

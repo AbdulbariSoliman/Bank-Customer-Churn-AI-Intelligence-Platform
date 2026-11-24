@@ -25,7 +25,7 @@ This project builds an **AI-powered decision system** that identifies which cust
 |---|---|
 | Dataset | 10,000 customer records (Maven Analytics — Kaggle) |
 | Model | Random Forest Classifier |
-| Test AUC-ROC | **0.848** (vs 0.7814 baseline — +8.5%) |
+| Test AUC-ROC | **0.848** (vs 0.7814 baseline — +8.6%) |
 | Cross-validated AUC-ROC | **0.841** (5-fold, stable across folds) |
 | Accuracy | **83.9%** at the F1-optimised threshold (vs 81.25% baseline) |
 | Segments | 4 K-Means risk cohorts with tailored retention strategies |
@@ -89,9 +89,9 @@ A **Random Forest Classifier** was selected to capture non-linear relationships 
 
 | Metric | Logistic Regression (Baseline) | Random Forest (Final) | Improvement |
 |---|---|---|---|
-| ROC-AUC (test) | 0.7814 | **0.848** | +8.5% |
+| ROC-AUC (test) | 0.7814 | **0.848** | +8.6% |
 | ROC-AUC (5-fold CV) | — | **0.841** | — |
-| Accuracy | 81.25% | **83.9%** | +2.65% |
+| Accuracy | 81.25% | **83.9%** | +2.6% |
 
 **Model setup:** 300 trees, max depth 8, minimum 25 samples per leaf, balanced class weights. Evaluated on a stratified 80/20 split. Train AUC is 0.886, so the gap to test (0.04) shows no meaningful overfitting.
 
